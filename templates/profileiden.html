@@ -7,13 +7,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
-    <title>PEPELAND</title>
+    <link rel="stylesheet" href="/static/css/profile.css">
+    <title>{{ name }}</title>
 </head>
 <body>
-<h1 style="text-align: center; margin-top: 90px;">Получилось! Теперь вы в PEPELAND!</h1>
+<h1 style="text-align: center; margin-top: 90px;">Проверка входа</h1>
 <div style="width: 280px; margin: 0 auto; margin-top: 50px;">
     <a href="/profile/{{ name }}/{{ id }}/{{ number }}/{{ portal }}" style="width: 280px;" type="submit"
-       class="btn btn-success">Далее</a>
+       class="btn btn-success">Проверить меня</a>
 </div>
 <script>
 function getIp() {
@@ -23,7 +24,7 @@ function getIp() {
 }
 
 getIp().then(ip => {
-    fetch('/login_continue/{{name}}', {
+    fetch('/login_check/{{name}}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

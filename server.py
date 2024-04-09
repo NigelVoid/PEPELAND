@@ -2,9 +2,9 @@ import os
 import random
 import sqlite3
 from flask import Flask
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for
 import json
-import csv
+import socket
 import shutil
 
 app = Flask(__name__)
@@ -17,7 +17,6 @@ def main():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    global email, username
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
@@ -39,7 +38,6 @@ def login():
                 AND Password == '{request.form.get('password').strip()}';""")
             results = cursor.fetchall()
             if results:
-                cursor.close()
                 data = {'id': f'{random.randint(255, 637456364837648326)}',
                         'number': f'{random.randint(25, 345)}',
                         'portal': f'{random.randint(2, 64574)}'}
@@ -55,6 +53,29 @@ def login():
                 cursor.close()
                 return render_template('login.html', goodReg='ВТН', email=request.form.get('email'),
                                        name=request.form.get('name'), password=request.form.get('password'))
+
+
+@app.route('/login_continue/<name>', methods=['GET', 'POST'])
+def login_continue(name):
+    if request.data:
+        with open(f'static/user/{name.strip()}/identification.json', 'r',
+                  encoding='utf8') as file:
+            fileData = json.load(file)
+            fileData['ip'] = f'{str(request.data)[9:-3]}'
+        with open(f'static/user/{name.strip()}/identification.json', 'w',
+                  encoding='utf8') as file:
+            json.dump(fileData, file)
+
+
+@app.route('/login_check/<name>', methods=['GET', 'POST'])
+def login_check(name):
+    if request.data:
+        with open(f'static/user/{name.strip()}/identification.json', 'r',
+                  encoding='utf8') as file:
+            fileData = json.load(file)
+        if fileData['ip'] == f'{str(request.data)[9:-3]}':
+            with open(f'static/user/{name.strip()}/сheck.txt', 'w', encoding='utf8') as file:
+                file.write('done')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -101,15 +122,24 @@ def register():
                                        name=request.form.get('name'))
 
 
-@app.route('/profile/<name>/<id>/<number>/<portal>')
+@app.route('/profile/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
 def profile(name, id, number, portal):
-    with open(f'static/user/{name}/identification.json', 'r', encoding='utf8') as file:
-        fileData = json.load(file)
-    path = f'/static/user/{name}/avatar/{os.listdir(f"static/user/{name}/avatar")[0]}'
-    with open(f'static/user/{name}/profile.json', 'r', encoding='utf8') as file:
-        fileDataprofile = json.load(file)
-    if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
-        return render_template('profile.html', name=name, path=path, subs=fileDataprofile['Subs'])
+    if request.method == 'GET':
+        with open(f'static/user/{name}/сheck.txt', 'r', encoding='utf8') as file:
+            if not file.readline():
+                return render_template('profileiden.html', name=name, id=id,
+                                       number=number, portal=portal)
+            else:
+                f = open(f'static/user/{name}/сheck.txt', 'w')
+                f.close()
+                with open(f'static/user/{name}/identification.json', 'r', encoding='utf8') as file:
+                    fileData = json.load(file)
+                path = f'/static/user/{name}/avatar/{os.listdir(f"static/user/{name}/avatar")[0]}'
+                with open(f'static/user/{name}/profile.json', 'r', encoding='utf8') as file:
+                    fileDataprofile = json.load(file)
+                if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
+                    return render_template('profile.html', name=name, path=path, subs=fileDataprofile['Subs'], id=id,
+                                           number=number, portal=portal)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ import os
 import random
 import sqlite3
 from flask import Flask
-from flask import request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for, send_from_directory, send_file, Response
 import json
 import socket
 import shutil
@@ -113,6 +113,9 @@ def register():
                 iden_file = open("identification.json", "w")
                 iden_file.close()
                 os.replace("identification.json", f"static/user/{request.form.get('name').strip()}/identification.json")
+                check_file = open('сheck.txt', 'w')
+                check_file.close()
+                os.replace("сheck.txt", f"static/user/{request.form.get('name').strip()}/сheck.txt")
                 os.mkdir(f'static/user/{request.form.get("name").strip()}/avatar')
                 shutil.copy('avatar.png', f'static/user/{request.form.get("name").strip()}/avatar/avatar.png')
                 shutil.copy('profile.json', f'static/user/{request.form.get("name").strip()}/profile.json')
@@ -120,6 +123,33 @@ def register():
             else:
                 return render_template('register.html', goodReg='ЕТИ', email=request.form.get('email'),
                                        name=request.form.get('name'))
+
+
+@app.route('/video/<video_name>')
+def get_video(video_name):
+    video_path = f'static/{video_name}'
+    file_size = os.path.getsize(video_path)
+    headers = {}
+
+    if 'Range' in request.headers:
+        range_header = request.headers.get('Range')
+        start = 0
+        end = file_size - 1
+        chunk_size = file_size
+        status_code = 200
+        headers['Content-Range'] = f"bytes {start}-{end}/{file_size}"
+        headers['Content-Length'] = chunk_size
+    else:
+        chunk_size = file_size
+
+    headers['Accept-Ranges'] = 'bytes'
+
+    return Response(
+        open(video_path, mode='rb').read(chunk_size),
+        status=status_code,
+        headers=headers,
+        content_type='video/mp4'
+    )
 
 
 @app.route('/profile/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
@@ -135,11 +165,15 @@ def profile(name, id, number, portal):
                 with open(f'static/user/{name}/identification.json', 'r', encoding='utf8') as file:
                     fileData = json.load(file)
                 path = f'/static/user/{name}/avatar/{os.listdir(f"static/user/{name}/avatar")[0]}'
+                photos = []
+                for photo in os.listdir(f"static/user/{name}/photos"):
+                    photos.append(f'/static/user/{name}/photos/{photo}')
                 with open(f'static/user/{name}/profile.json', 'r', encoding='utf8') as file:
                     fileDataprofile = json.load(file)
                 if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
-                    return render_template('profile.html', name=name, path=path, subs=fileDataprofile['Subs'], id=id,
-                                           number=number, portal=portal)
+                    return render_template('profile.html', name=name, path_photos=photos, subs=fileDataprofile['Subs'],
+                                           id=id,
+                                           number=number, portal=portal, path=path)
 
 
 if __name__ == '__main__':

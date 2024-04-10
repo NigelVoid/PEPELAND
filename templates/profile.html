@@ -33,6 +33,11 @@
         <h2 style="font-size: 45px; margin-left: 40px; margin-top: 35px">{{ name }}</h2>
         <h2 style="font-size: 20px; margin-left: 40px; margin-top: 5px">Подписчики: {{ subs }}</h2>
     </div>
+    <div style="margin-left: 10%; display: flex; flex-direction: column;">
+        <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-success">Аватарка</a>
+        <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-success">+ Фото</a>
+        <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-success">+ Видео</a>
+    </div>
 </div>
 <p class="d-inline-flex gap-1">
 <div style="width: 300px; margin: 0 auto; margin-top: 80px">
@@ -52,30 +57,34 @@
 <div class="collapse" id="collapseExample">
     <div class="card card-body">
         <div style="display: full">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
-            <img src="{{ path }}" width="240px" height="240px">
+            {% if path_photos %}
+            {% for photo in path_photos %}
+            <img src="{{ photo }}" width="240px" height="240px">
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center">*Tреск сверчков*</p>
+            {% endif %}
         </div>
     </div>
 </div>
 <div class="collapse" id="collapseExample2">
     <div class="card card-body">
-        <video width="400" height="300" controls>
-            <source src="/static/Всё решено.mp4" type="video/mp4">
-        </video>
+        <div style="display: full">
+            <video width="400px" height="300px" controls>
+                <source src="/video/d.mp4" type="video/mp4">
+            </video>
+            <video width="400px" height="300px" controls>
+                <source src="/video/nggu.mp4" type="video/mp4">
+            </video>
+            <video width="400px" height="300px" controls>
+                <source src="/video/Cyberpunk 2077 — Never Fade Away by P. T. Adamczyk & Olga Jankowska (SAMURAI Cover).mp4"
+                        type="video/mp4">
+            </video>
+            <video width="400px" height="300px" controls>
+                <source src="/video/Joost Klein.mp4"
+                        type="video/mp4">
+            </video>
+        </div>
     </div>
 </div>
 </body>

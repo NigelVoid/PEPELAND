@@ -13,8 +13,20 @@
 <body>
 <h1 style="text-align: center; margin-top: 90px;">Проверка входа</h1>
 <div style="width: 280px; margin: 0 auto; margin-top: 50px;">
+    {% if place == 'profile' %}
     <a href="/profile/{{ name }}/{{ id }}/{{ number }}/{{ portal }}" style="width: 280px;" type="submit"
        class="btn btn-success">Проверить меня</a>
+    {% else %}
+    {% if place == 'addphoto' %}
+    <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}" style="width: 280px;" type="submit"
+       class="btn btn-success">Проверить меня</a>
+    {% else %}
+    {% if place == 'addvideo' %}
+    <a href="/addvideo/{{ name }}/{{ id }}/{{ number }}/{{ portal }}" style="width: 280px;" type="submit"
+       class="btn btn-success">Проверить меня</a>
+    {% endif %}
+    {% endif %}
+    {% endif %}
 </div>
 <script>
 function getIp() {

@@ -117,6 +117,8 @@ def register():
                 check_file.close()
                 os.replace("сheck.txt", f"static/user/{request.form.get('name').strip()}/сheck.txt")
                 os.mkdir(f'static/user/{request.form.get("name").strip()}/avatar')
+                os.mkdir(f'static/user/{request.form.get("name").strip()}/photos')
+                os.mkdir(f'static/user/{request.form.get("name").strip()}/video')
                 shutil.copy('avatar.png', f'static/user/{request.form.get("name").strip()}/avatar/avatar.png')
                 shutil.copy('profile.json', f'static/user/{request.form.get("name").strip()}/profile.json')
                 return render_template('main.html')
@@ -125,8 +127,35 @@ def register():
                                        name=request.form.get('name'))
 
 
-@app.route('/video/<video_name>')
-def get_video(video_name):
+@app.route('/video/<video_name>/<name>')
+def get_video(video_name, name):
+    video_path = f'static/user/{name}/video/{video_name}'
+    file_size = os.path.getsize(video_path)
+    headers = {}
+
+    if 'Range' in request.headers:
+        range_header = request.headers.get('Range')
+        start = 0
+        end = file_size - 1
+        chunk_size = file_size
+        status_code = 200
+        headers['Content-Range'] = f"bytes {start}-{end}/{file_size}"
+        headers['Content-Length'] = chunk_size
+    else:
+        chunk_size = file_size
+
+    headers['Accept-Ranges'] = 'bytes'
+
+    return Response(
+        open(video_path, mode='rb').read(chunk_size),
+        status=status_code,
+        headers=headers,
+        content_type='video/mp4'
+    )
+
+
+@app.route('/addvideo/<video_name>')
+def addget_video(video_name):
     video_path = f'static/{video_name}'
     file_size = os.path.getsize(video_path)
     headers = {}
@@ -152,13 +181,67 @@ def get_video(video_name):
     )
 
 
+@app.route('/acceptPhoto/<name>/<id>/<number>/<portal>/<filename>', methods=['GET', 'POST'])
+def acceptPhoto(name, id, number, portal, filename):
+    if request.method == 'GET':
+        return render_template('acceptPhoto.html', path=f'/static/{filename}')
+    elif request.method == 'POST':
+        shutil.move(f"static/{filename}", f"static/user/{name}/photos/{filename}")
+        return redirect(f'/profile/{name}/{id}/{number}/{portal}')
+
+
+@app.route('/addphoto/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
+def addphoto(name, id, number, portal):
+    if request.method == 'GET':
+        with open(f'static/user/{name}/сheck.txt', 'r', encoding='utf8') as file:
+            if not file.readline():
+                return render_template('profileiden.html', name=name, id=id,
+                                       number=number, portal=portal, place='addphoto')
+            else:
+                f = open(f'static/user/{name}/сheck.txt', 'w')
+                f.close()
+                return render_template('addphoto.html')
+    elif request.method == 'POST':
+        if request.files.get('file'):
+            f = request.files['file']
+            f.save(f'static/({name}){f.filename}')
+            return redirect(f'/acceptPhoto/{name}/{id}/{number}/{portal}/({name}){f.filename}')
+
+
+@app.route('/acceptVideo/<name>/<id>/<number>/<portal>/<filename>', methods=['GET', 'POST'])
+def acceptVideo(name, id, number, portal, filename):
+    if request.method == 'GET':
+        return render_template('acceptVideo.html', video=f'{filename}')
+    elif request.method == 'POST':
+        shutil.move(f"static/{filename}", f"static/user/{name}/video/{filename}")
+        return redirect(f'/profile/{name}/{id}/{number}/{portal}')
+
+
+@app.route('/addvideo/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
+def addvideo(name, id, number, portal):
+    if request.method == 'GET':
+        with open(f'static/user/{name}/сheck.txt', 'r', encoding='utf8') as file:
+            if not file.readline():
+                return render_template('profileiden.html', name=name, id=id,
+                                       number=number, portal=portal, place='addvideo')
+            else:
+                f = open(f'static/user/{name}/сheck.txt', 'w')
+                f.close()
+                return render_template('addvideo.html')
+    elif request.method == 'POST':
+        if request.files.get('file'):
+            f = request.files['file']
+            f.save(f'static/({name}){f.filename}')
+            return redirect(f'/acceptVideo/{name}/{id}/{number}/{portal}/({name}){f.filename}')
+
+
 @app.route('/profile/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
 def profile(name, id, number, portal):
     if request.method == 'GET':
         with open(f'static/user/{name}/сheck.txt', 'r', encoding='utf8') as file:
             if not file.readline():
                 return render_template('profileiden.html', name=name, id=id,
-                                       number=number, portal=portal)
+                                       number=number, portal=portal, place='profile')
             else:
                 f = open(f'static/user/{name}/сheck.txt', 'w')
                 f.close()
@@ -168,12 +251,15 @@ def profile(name, id, number, portal):
                 photos = []
                 for photo in os.listdir(f"static/user/{name}/photos"):
                     photos.append(f'/static/user/{name}/photos/{photo}')
+                videos = []
+                for video in os.listdir(f"static/user/{name}/video"):
+                    videos.append(video)
                 with open(f'static/user/{name}/profile.json', 'r', encoding='utf8') as file:
                     fileDataprofile = json.load(file)
                 if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
                     return render_template('profile.html', name=name, path_photos=photos, subs=fileDataprofile['Subs'],
                                            id=id,
-                                           number=number, portal=portal, path=path)
+                                           number=number, portal=portal, path=path, path_videos=videos)
 
 
 if __name__ == '__main__':

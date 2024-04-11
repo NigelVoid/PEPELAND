@@ -16,31 +16,31 @@
        class="btn btn-success">Далее</a>
 </div>
 <script>
-function getIp() {
-    return fetch('https://api.ipify.org/?format=json')
-        .then(response => response.json())
-        .then(data => data.ip);
-}
+    function getIp() {
+        return fetch('https://api.ipify.org/?format=json')
+            .then(response => response.json())
+            .then(data => data.ip);
+    }
 
-getIp().then(ip => {
-    fetch('/login_continue/{{name}}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ip: ip })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('IP-адрес успешно отправлен на сервер');
-        } else {
-            console.error('Ошибка при отправке IP-адреса на сервер');
-        }
-    })
-    .catch(error => {
-        console.error('Произошла ошибка:', error);
+    getIp().then(ip => {
+        fetch('/login_continue/{{name}}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ip: ip })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('IP-адрес успешно отправлен на сервер');
+            } else {
+                console.error('Ошибка при отправке IP-адреса на сервер');
+            }
+        })
+        .catch(error => {
+            console.error('Произошла ошибка:', error);
+        });
     });
-});
 </script>
 </body>
 </html>

@@ -33,10 +33,31 @@
         <h2 style="font-size: 45px; margin-left: 40px; margin-top: 35px">{{ name }}</h2>
         <h2 style="font-size: 20px; margin-left: 40px; margin-top: 5px">Подписчики: {{ subs }}</h2>
     </div>
-    <div style="margin-left: 10%; display: flex; flex-direction: column;">
-        <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-success">Аватарка</a>
-        <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-success">+ Фото</a>
-        <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-success">+ Видео</a>
+    <div style="margin-left: 10%">
+        <div style="display: flex; flex-direction: column;">
+            <p class="d-inline-flex gap-1">
+            <div class="btn-group" role="group" aria-label="Basic example" style="width: 238px">
+                <button class="btn btn-success" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample3"
+                        aria-expanded="false" aria-controls="collapseExample">Действие в профиле
+                </button>
+            </div>
+        </div>
+        <div class="collapse" id="collapseExample3">
+            <div class="card card-body" style="width: 238px;">
+                <div style="display: full; width: 205px;">
+                    <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-outline-success">Аватарка</a>
+                    <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                       style="width: 100px; margin-top: 10px"
+                       type="button" class="btn btn-outline-success">+ Фото</a>
+                    <a href="/addvideo/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                       style="width: 100px; margin-top: 10px"
+                       type="button" class="btn btn-outline-success">+ Видео</a>
+                    <a style="width: 100px; margin-top: 10px"
+                       type="button" class="btn btn-outline-success">+ Запись</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <p class="d-inline-flex gap-1">
@@ -70,20 +91,15 @@
 <div class="collapse" id="collapseExample2">
     <div class="card card-body">
         <div style="display: full">
+            {% if path_videos %}
+            {% for video in path_videos %}
             <video width="400px" height="300px" controls>
-                <source src="/video/d.mp4" type="video/mp4">
+                <source src="/video/{{ video }}/{{ name }}" type="video/mp4">
             </video>
-            <video width="400px" height="300px" controls>
-                <source src="/video/nggu.mp4" type="video/mp4">
-            </video>
-            <video width="400px" height="300px" controls>
-                <source src="/video/Cyberpunk 2077 — Never Fade Away by P. T. Adamczyk & Olga Jankowska (SAMURAI Cover).mp4"
-                        type="video/mp4">
-            </video>
-            <video width="400px" height="300px" controls>
-                <source src="/video/Joost Klein.mp4"
-                        type="video/mp4">
-            </video>
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center">*Tреск сверчков*</p>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -53,7 +53,8 @@
                     <a href="/addvideo/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
                        style="width: 100px; margin-top: 10px"
                        type="button" class="btn btn-outline-success">+ Видео</a>
-                    <a style="width: 100px; margin-top: 10px"
+                    <a href="/makeanentry/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                       style="width: 100px; margin-top: 10px"
                        type="button" class="btn btn-outline-success">+ Запись</a>
                 </div>
             </div>
@@ -69,12 +70,11 @@
         <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2"
                 aria-expanded="false" aria-controls="collapseExample">Видео
         </button>
-        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">Right
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample4"
+                aria-expanded="false" aria-controls="collapseExample">Записи
         </button>
     </div>
 </div>
-</p>
 <div class="collapse" id="collapseExample">
     <div class="card card-body">
         <div style="display: full">
@@ -100,6 +100,75 @@
             {% else %}
             <p style="text-align: center">*Tреск сверчков*</p>
             {% endif %}
+        </div>
+    </div>
+</div>
+<div class="collapse" id="collapseExample4">
+    <div class="card card-body">
+        <div style="display: full">
+            {% if endata %}
+            {% for data in endata %}
+            <div style="width: 600px; margin: 0 auto;">
+                <form class="forma" style="margin-top: 40px; width: 100%;">
+                    {% if data['topic'] %}
+                    <h4 style="text-align: center">{{ data['topic'] }}</h4>
+                    {% endif %}
+                    {% if data['text'] %}
+                    <p style="color: white;">{{ data['text'] }}</p>
+                    {% endif %}
+                    {% if data['url'] %}
+                    <a href="{{ data['url'] }}"><p>{{ data['url'] }}</p></a>
+                    {% endif %}
+                    {% if data['files'] %}
+                    <div id="carouselExampleIndicators" class="carousel slide">
+                        <div class="carousel-inner">
+                            {% set n = 0 %}
+                            {% for i in data['files'] %}
+                            {% if n == 0 %}
+                            <div class="carousel-item active">
+                                {% if i[-3:] == 'mp4' %}
+                                <video height="400px" controls>
+                                    <source src="" type="video/mp4">
+                                </video>
+                                {% else %}
+                                <img src="/static/user/{{ name }}/entrys/files/{{i}}" class="d-block w-100"
+                                     height="400px">
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <div class="carousel-item">
+                                {% if i[-3:] == 'mp4' %}
+                                <video width="400px" height="300px" controls>
+                                    <source src="" type="video/mp4">
+                                </video>
+                                {% else %}
+                                <img src="/static/user/{{ name }}/entrys/files/{{i}}" class="d-block w-100"
+                                     height="400px">
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% set n = n + 1 %}
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center">*Tреск сверчков*</p>
+            {% endif %}
+
         </div>
     </div>
 </div>

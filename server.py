@@ -235,6 +235,34 @@ def addvideo(name, id, number, portal):
             return redirect(f'/acceptVideo/{name}/{id}/{number}/{portal}/({name}){f.filename}')
 
 
+@app.route('/makeanentry/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
+def makeanentry(name, id, number, portal):
+    if request.method == 'GET':
+        with open(f'static/user/{name}/сheck.txt', 'r', encoding='utf8') as file:
+            if not file.readline():
+                return render_template('profileiden.html', name=name, id=id,
+                                       number=number, portal=portal, place='makeanentry')
+            else:
+                f = open(f'static/user/{name}/сheck.txt', 'w')
+                f.close()
+                return render_template('makeanentry.html')
+    elif request.method == 'POST':
+        files = []
+        for key in request.files.keys():
+            f = request.files[key]
+            f.save(
+                f'static/user/{name}/entrys/files/{len(os.listdir(f"static/user/{name}/entrys/files")) + 1}{f.filename}')
+            files.append(str(len(os.listdir(f"static/user/{name}/entrys")) + 1) + request.files[key].filename)
+        data = {'topic': f'{request.form.get("topic")}',
+                'text': f'{request.form.get("text")}',
+                'url': f'{request.form.get("url")}',
+                'files': files}
+        with open(f'static/user/{name}/entrys/entry{len(os.listdir(f"static/user/{name}/entrys"))}.json', 'w',
+                  encoding='utf8') as file:
+            json.dump(data, file)
+        return redirect(f'/profile/{name}/{id}/{number}/{portal}')
+
+
 @app.route('/profile/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
 def profile(name, id, number, portal):
     if request.method == 'GET':
@@ -256,10 +284,17 @@ def profile(name, id, number, portal):
                     videos.append(video)
                 with open(f'static/user/{name}/profile.json', 'r', encoding='utf8') as file:
                     fileDataprofile = json.load(file)
+                endata = []
+                if len(os.listdir(f'static/user/{name}/entrys')) > 1:
+                    for num in range(1, len(os.listdir(f'static/user/{name}/entrys'))):
+                        with open(f'static/user/{name}/entrys/entry{num}.json', 'r', encoding='utf8') as file:
+                            fileDataen = json.load(file)
+                            endata.append(fileDataen)
+                print(endata)
                 if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
                     return render_template('profile.html', name=name, path_photos=photos, subs=fileDataprofile['Subs'],
                                            id=id,
-                                           number=number, portal=portal, path=path, path_videos=videos)
+                                           number=number, portal=portal, path=path, path_videos=videos, endata=endata)
 
 
 if __name__ == '__main__':

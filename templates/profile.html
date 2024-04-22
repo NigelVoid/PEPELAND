@@ -16,53 +16,90 @@
      role="alert">
     <img src="/static/img/main/logo.png" width="170">
 </div>
-<div style="width: 100%; position: absolute; margin-top: 45px;">
-    <h1 style="font-size: 45px; text-align: center">PEPELAND</h1>
-</div>
-<h1 style="text-align: center; font-size: 20px; color: white;  user-select: none;">//////////////</h1>
-<div style="display: flex">
-    <form class="forma" style="width: 220px; height: 165px">
-        <a style="width: 200px; margin-top: 10px" type="button" class="btn btn-success">События</a>
-        <a style="width: 200px; margin-top: 10px" type="button" class="btn btn-success">События</a>
-        <a style="width: 200px; margin-top: 10px" type="button" class="btn btn-success">События</a>
-    </form>
-    <form class="forma" style="width: 165px; height: 165px; margin-left: 18%">
-        <img src="{{ path }}" width="145px" height="145px">
-    </form>
-    <div>
-        <h2 style="font-size: 45px; margin-left: 40px; margin-top: 35px">{{ name }}</h2>
-        <h2 style="font-size: 20px; margin-left: 40px; margin-top: 5px">Подписчики: {{ subs }}</h2>
+<div class="name-site">
+    <div class="name-site2">
+        <div style="margin: auto auto; width: 220px;">
+            <h1 style="font-size: 45px">PEPELAND</h1>
+        </div>
     </div>
-    <div style="margin-left: 10%">
-        <div style="display: flex; flex-direction: column;">
-            <p class="d-inline-flex gap-1">
-            <div class="btn-group" role="group" aria-label="Basic example" style="width: 238px">
-                <button class="btn btn-success" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseExample3"
-                        aria-expanded="false" aria-controls="collapseExample">Действие в профиле
-                </button>
+</div>
+<h1 class="otstup">//////////////</h1>
+<div style="width: 16.5%; height: width / 1.5; position: absolute; z-index: 2">
+    <form class="forma" style="width: 100%; height: 100%">
+        <a href="/chat/{{name}}" style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">Общий
+            чат</a>
+        <button style="width: 90.9%; margin-top: 1%" class="btn btn-success" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseExample5"
+                aria-expanded="false" aria-controls="collapseExample">Участники
+        </button>
+        <div class="collapse" id="collapseExample5" style="height: 50%">
+            <div class="card card-body" style="width: 90.9%; height: 100%">
+                <div style="display: flex; flex-direction: column; width: 90.9%; height: 100%;">
+                    <div style="overflow-y: auto; height: 300px">
+                        {% for member in members %}
+                        {% if member != name %}
+                        <a href="/otherprofile/{{member}}/{{name}}/{{id}}/{{number}}/{{portal}}"
+                           style="width: 95%; margin-top: 2%" type="button"
+                           class="btn btn-outline-success">{{member}}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
             </div>
         </div>
-        <div class="collapse" id="collapseExample3">
-            <div class="card card-body" style="width: 238px;">
-                <div style="display: full; width: 205px;">
-                    <a style="width: 100px; margin-top: 10px" type="button" class="btn btn-outline-success">Аватарка</a>
-                    <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                       style="width: 100px; margin-top: 10px"
-                       type="button" class="btn btn-outline-success">+ Фото</a>
-                    <a href="/addvideo/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                       style="width: 100px; margin-top: 10px"
-                       type="button" class="btn btn-outline-success">+ Видео</a>
-                    <a href="/makeanentry/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                       style="width: 100px; margin-top: 10px"
-                       type="button" class="btn btn-outline-success">+ Запись</a>
+        <a style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">События</a>
+        <a style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">События</a>
+    </form>
+</div>
+<div class="profile">
+    <div class="profile2">
+        <form class="forma" style="width: 165px; height: 165px">
+            <img src="{{ path }}" width="145px" height="145px">
+        </form>
+        <div>
+            <h2 class="name">{{ name }}</h2>
+        </div>
+        <div style="margin-left: 10%">
+            <div class="profileActions">
+                <p class="d-inline-flex gap-1">
+                <div class="btn-group" role="group" aria-label="Basic example" style="width: 238px">
+                    <button class="btn btn-success" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseExample3"
+                            aria-expanded="false" aria-controls="collapseExample">Действие в профиле
+                    </button>
+                </div>
+                <div class="collapse" id="collapseExample3">
+                    <div class="card card-body" style="width: 238px;">
+                        <div style="display: full; width: 205px;">
+                            <a href="/addAvatar/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                               style="width: 100px; margin-top: 10px" type="button"
+                               class="btn btn-outline-success">Аватарка</a>
+                            <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                               style="width: 100px; margin-top: 10px"
+                               type="button" class="btn btn-outline-success">+ Фото</a>
+                            <a href="/addvideo/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                               style="width: 100px; margin-top: 10px"
+                               type="button" class="btn btn-outline-success">+ Видео</a>
+                            <a href="/makeanentry/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
+                               style="width: 100px; margin-top: 10px"
+                               type="button" class="btn btn-outline-success">+ Запись</a>
+                        </div>
+                    </div>
+                </div>
+                <p class="d-inline-flex gap-1">
+                <div class="btn-group" role="group" aria-label="Basic example" style="width: 238px; margin-top: 20px">
+                    <button class="btn btn-success" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseExample6"
+                            aria-expanded="false" aria-controls="collapseExample">Чат с друзьями
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <p class="d-inline-flex gap-1">
-<div style="width: 300px; margin: 0 auto; margin-top: 80px">
+<div style="width: 300px; margin: 0 auto; margin-top: 240px">
     <div class="btn-group" role="group" aria-label="Basic example" style="width: 300px">
         <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
                 aria-expanded="false" aria-controls="collapseExample">Фото
@@ -120,16 +157,17 @@
                     <a href="{{ data['url'] }}"><p>{{ data['url'] }}</p></a>
                     {% endif %}
                     {% if data['files'] %}
-                    <div id="carouselExampleIndicators" class="carousel slide">
+                    <div id="carouselExampleIndicators{{ loop.index }}" class="carousel slide">
                         <div class="carousel-inner">
-                            {% set n = 0 %}
                             {% for i in data['files'] %}
-                            {% if n == 0 %}
+                            {% if loop.first %}
                             <div class="carousel-item active">
                                 {% if i[-3:] == 'mp4' %}
-                                <video height="400px" controls>
-                                    <source src="" type="video/mp4">
-                                </video>
+                                <div style="width: 400px; margin: 0 auto;">
+                                    <video height="300px" width="100%" controls>
+                                        <source src="/addenvideo/{{i}}/{{name}}" type="video/mp4">
+                                    </video>
+                                </div>
                                 {% else %}
                                 <img src="/static/user/{{ name }}/entrys/files/{{i}}" class="d-block w-100"
                                      height="400px">
@@ -138,24 +176,27 @@
                             {% else %}
                             <div class="carousel-item">
                                 {% if i[-3:] == 'mp4' %}
-                                <video width="400px" height="300px" controls>
-                                    <source src="" type="video/mp4">
-                                </video>
+                                <div style="width: 400px; margin: 0 auto;">
+                                    <video height="300px" width="100%" controls>
+                                        <source src="/addenvideo/{{i}}/{{name}}" type="video/mp4">
+                                    </video>
+                                </div>
                                 {% else %}
                                 <img src="/static/user/{{ name }}/entrys/files/{{i}}" class="d-block w-100"
                                      height="400px">
                                 {% endif %}
                             </div>
                             {% endif %}
-                            {% set n = n + 1 %}
                             {% endfor %}
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carouselExampleIndicators{{ loop.index }}"
                                 data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        <button class="carousel-control-next" type="button"
+                                data-bs-target="#carouselExampleIndicators{{ loop.index }}"
                                 data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>

@@ -1,0 +1,18 @@
+.forma {
+    width: 700px;
+    background-color: #90EE90;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.scroll {
+    width: 36.5%; /* Высота блока */
+    height: 600px;
+    background-color: #90EE90;
+    overflow-y: auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 80px
+}

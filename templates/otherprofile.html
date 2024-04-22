@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/otherprofile.css">
+    <title>{{ name }}</title>
+</head>
+<body>
+<div style="background-color: rgba(152, 251, 152, 255); width: 100%; float: left"
+     class="alert alert-dark"
+     role="alert">
+    <img src="/static/img/main/logo.png" width="170">
+</div>
+<div class="name-site">
+    <div class="name-site2">
+        <div style="margin: auto auto; width: 220px;">
+            <h1 style="font-size: 45px">PEPELAND</h1>
+        </div>
+    </div>
+</div>
+<h1 class="otstup">//////////////</h1>
+<div style="width: 16.5%; height: width / 1.5; position: absolute; z-index: 2">
+    <form class="forma" style="width: 100%; height: 100%">
+        <a href="/chat/{{myname}}" style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">Общий
+            чат</a>
+        <button style="width: 90.9%; margin-top: 1%" class="btn btn-success" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseExample5"
+                aria-expanded="false" aria-controls="collapseExample">Участники
+        </button>
+        <div class="collapse" id="collapseExample5" style="height: 50%">
+            <div class="card card-body" style="width: 90.9%; height: 100%">
+                <div style="display: flex; flex-direction: column; width: 90.9%; height: 100%;">
+                    <div style="overflow-y: auto; height: 300px">
+                        {% for member in members %}
+                        {% if member != myname %}
+                        <a href="/otherprofile/{{member}}/{{myname}}/{{id}}/{{number}}/{{portal}}"
+                           style="width: 95%; margin-top: 2%" type="button"
+                           class="btn btn-outline-success">{{member}}</a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <a style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">События</a>
+        <a style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">События</a>
+    </form>
+</div>
+<div class="profile">
+    <div class="profile2">
+        <form class="forma" style="width: 165px; height: 165px">
+            <img src="{{ path }}" width="145px" height="145px">
+        </form>
+        <div>
+            <h2 class="name">{{ name }}</h2>
+        </div>
+        {% if not myname in invites %}
+        <div style="margin-left: 10%">
+            <div class="profileActions" style="margin-top: 20%">
+                <div style="width: 238px;">
+                    <button id="mbtn" onclick="addFriend()" style="width: 230px" class="btn btn-success" type="button">
+                        Добавить в друзья
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div style="margin-left: 10%">
+            <div class="profileActions" style="margin-top: 20%">
+                <div style="width: 238px;">
+                    <button onclick="addFriend()" style="width: 230px; background-color: #41e897" class="btn btn-dark"
+                            type="button"> Отправлено
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<p class="d-inline-flex gap-1">
+<div style="width: 300px; margin: 0 auto; margin-top: 240px">
+    <div class="btn-group" role="group" aria-label="Basic example" style="width: 300px">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">Фото
+        </button>
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2"
+                aria-expanded="false" aria-controls="collapseExample">Видео
+        </button>
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample4"
+                aria-expanded="false" aria-controls="collapseExample">Записи
+        </button>
+    </div>
+</div>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        <div style="display: full">
+            {% if path_photos %}
+            {% for photo in path_photos %}
+            <img src="{{ photo }}" width="240px" height="240px">
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center">*Tреск сверчков*</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="collapse" id="collapseExample2">
+    <div class="card card-body">
+        <div style="display: full">
+            {% if path_videos %}
+            {% for video in path_videos %}
+            <video width="400px" height="300px" controls>
+                <source src="/video/{{ video }}/{{ name }}" type="video/mp4">
+            </video>
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center">*Tреск сверчков*</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="collapse" id="collapseExample4">
+    <div class="card card-body">
+        <div style="display: full">
+            {% if endata %}
+            {% for data in endata %}
+            <div style="width: 600px; margin: 0 auto;">
+                <form class="forma" style="margin-top: 40px; width: 100%;">
+                    {% if data['topic'] %}
+                    <h4 style="text-align: center">{{ data['topic'] }}</h4>
+                    {% endif %}
+                    {% if data['text'] %}
+                    <p style="color: white;">{{ data['text'] }}</p>
+                    {% endif %}
+                    {% if data['url'] %}
+                    <a href="{{ data['url'] }}"><p>{{ data['url'] }}</p></a>
+                    {% endif %}
+                    {% if data['files'] %}
+                    <div id="carouselExampleIndicators{{ loop.index }}" class="carousel slide">
+                        <div class="carousel-inner">
+                            {% for i in data['files'] %}
+                            {% if loop.first %}
+                            <div class="carousel-item active">
+                                {% if i[-3:] == 'mp4' %}
+                                <div style="width: 400px; margin: 0 auto;">
+                                    <video height="300px" width="100%" controls>
+                                        <source src="/addenvideo/{{i}}/{{name}}" type="video/mp4">
+                                    </video>
+                                </div>
+                                {% else %}
+                                <img src="/static/user/{{ name }}/entrys/files/{{i}}" class="d-block w-100"
+                                     height="400px">
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <div class="carousel-item">
+                                {% if i[-3:] == 'mp4' %}
+                                <div style="width: 400px; margin: 0 auto;">
+                                    <video height="300px" width="100%" controls>
+                                        <source src="/addenvideo/{{i}}/{{name}}" type="video/mp4">
+                                    </video>
+                                </div>
+                                {% else %}
+                                <img src="/static/user/{{ name }}/entrys/files/{{i}}" class="d-block w-100"
+                                     height="400px">
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carouselExampleIndicators{{ loop.index }}"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button"
+                                data-bs-target="#carouselExampleIndicators{{ loop.index }}"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center">*Tреск сверчков*</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function addFriend() {
+  fetch('/addFriend/{{name}}/{{myname}}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text: 'dwioajd' }),
+  });
+  const button = document.getElementById('mbtn');
+  button.style.backgroundColor = '#41e897'
+  button.innerHTML = 'Отправлено'
+}
+</script>
+</html>

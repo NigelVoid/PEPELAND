@@ -2,10 +2,7 @@
   "version": 2,
   "functions": {
     "api": {
-      "runtime": "python3.8",
-      "environment": {
-        "FLASK_ENV": "production"
-      }
+      "runtime": "python3.8"
     }
   }
 }

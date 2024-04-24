@@ -11,5 +11,14 @@
       "src": "/.*",
       "dest": "server.py"
     }
-  ]
+  ],
+  "functions": {
+    "api": {
+      "runtime": "python3.8",
+      "memory": 1024
+    },
+    "environment": {
+      "FLASK_ENV": "production"
+    }
+  }
 }

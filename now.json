@@ -1,12 +1,11 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server.py",
-      "use": "@now/python"
+  "functions": {
+    "api": {
+      "runtime": "python3.8",
+      "environment": {
+        "FLASK_ENV": "production"
+      }
     }
-  ],
-  "routes": [
-    { "src": "/.*", "dest": "server.py" }
-  ]
+  }
 }

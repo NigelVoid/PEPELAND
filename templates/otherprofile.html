@@ -24,11 +24,11 @@
     </div>
 </div>
 <h1 class="otstup">//////////////</h1>
-<div style="width: 16.5%; height: width / 1.5; position: absolute; z-index: 2">
+<div style="width: 16.5%; position: absolute; z-index: 3">
     <form class="forma" style="width: 100%; height: 100%">
-        <a href="/chat/{{myname}}" style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">Общий
+        <a href="/chat/{{name}}" style="width: 90.9%; margin-top: 2%" type="button" class="btn btn-success">Общий
             чат</a>
-        <button style="width: 90.9%; margin-top: 1%" class="btn btn-success" type="button" data-bs-toggle="collapse"
+        <button style="width: 90.9%; margin-top: 3%" class="btn btn-success" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseExample5"
                 aria-expanded="false" aria-controls="collapseExample">Участники
         </button>
@@ -37,7 +37,7 @@
                 <div style="display: flex; flex-direction: column; width: 90.9%; height: 100%;">
                     <div style="overflow-y: auto; height: 300px">
                         {% for member in members %}
-                        {% if member != myname %}
+                        {% if member != myname and member != name %}
                         <a href="/otherprofile/{{member}}/{{myname}}/{{id}}/{{number}}/{{portal}}"
                            style="width: 95%; margin-top: 2%" type="button"
                            class="btn btn-outline-success">{{member}}</a>
@@ -48,23 +48,34 @@
                 </div>
             </div>
         </div>
-        <a style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">События</a>
-        <a style="width: 90.9%; margin-top: 1%" type="button" class="btn btn-success">События</a>
+        <a href="/profile/{{myname}}/{{id}}/{{number}}/{{portal}}" style="width: 90.9%; margin-top: 3%" type="button" class="btn btn-success">Мой профиль</a>
+        <a style="width: 90.9%; margin-top: 3%" type="button" class="btn btn-success">События</a>
     </form>
 </div>
 <div class="profile">
     <div class="profile2">
         <form class="forma" style="width: 165px; height: 165px">
-            <img src="{{ path }}" width="145px" height="145px">
+            <img style="border-radius: 30px" src="{{ path }}" width="145px" height="145px">
         </form>
         <div>
             <h2 class="name">{{ name }}</h2>
         </div>
         {% if not myname in invites %}
+        {% if myname in Friends %}
         <div style="margin-left: 10%">
             <div class="profileActions" style="margin-top: 20%">
-                <div style="width: 238px;">
-                    <button id="mbtn" onclick="addFriend()" style="width: 230px" class="btn btn-success" type="button">
+                <div style="width: 218px;">
+                    <button style="width: 210px; background-color: #38c782" class="btn btn-dark"
+                            type="button"> Ваш друг
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div style="margin-left: 10%">
+            <div class="profileActions" style="margin-top: 20%">
+                <div style="width: 218px;">
+                    <button id="mbtn" onclick="addFriend()" style="width: 210px" class="btn btn-success" type="button">
                         Добавить в друзья
                     </button>
                 </div>
@@ -73,8 +84,8 @@
         {% else %}
         <div style="margin-left: 10%">
             <div class="profileActions" style="margin-top: 20%">
-                <div style="width: 238px;">
-                    <button onclick="addFriend()" style="width: 230px; background-color: #41e897" class="btn btn-dark"
+                <div style="width: 218px;">
+                    <button style="width: 210px; background-color: #41e897" class="btn btn-dark"
                             type="button"> Отправлено
                     </button>
                 </div>
@@ -84,21 +95,24 @@
     </div>
 </div>
 <p class="d-inline-flex gap-1">
-<div style="width: 300px; margin: 0 auto; margin-top: 240px">
-    <div class="btn-group" role="group" aria-label="Basic example" style="width: 300px">
-        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">Фото
-        </button>
-        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2"
-                aria-expanded="false" aria-controls="collapseExample">Видео
-        </button>
-        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample4"
-                aria-expanded="false" aria-controls="collapseExample">Записи
-        </button>
+<div style="width: 100%; margin-top: 340px; background-color: #88e57073; padding: 10px; border-radius: 10px">
+    <div style="width: 300px; margin: 0 auto">
+        <div class="btn-group" role="group" aria-label="Basic example"
+             style="width: 300px;">
+            <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample">Фото
+            </button>
+            <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2"
+                    aria-expanded="false" aria-controls="collapseExample">Видео
+            </button>
+            <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample4"
+                    aria-expanded="false" aria-controls="collapseExample">Записи
+            </button>
+        </div>
     </div>
 </div>
 <div class="collapse" id="collapseExample">
-    <div class="card card-body">
+    <div class="card card-body" style="background-color: #92fca969">
         <div style="display: full">
             {% if path_photos %}
             {% for photo in path_photos %}
@@ -111,7 +125,7 @@
     </div>
 </div>
 <div class="collapse" id="collapseExample2">
-    <div class="card card-body">
+    <div class="card card-body" style="background-color: #94fc9269">
         <div style="display: full">
             {% if path_videos %}
             {% for video in path_videos %}
@@ -126,7 +140,7 @@
     </div>
 </div>
 <div class="collapse" id="collapseExample4">
-    <div class="card card-body">
+    <div class="card card-body" style="background-color: #a8fc9269">
         <div style="display: full">
             {% if endata %}
             {% for data in endata %}

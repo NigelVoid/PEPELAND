@@ -122,6 +122,7 @@ def register():
                 os.mkdir(f'static/user/{request.form.get("name").strip()}/entrys/files')
                 shutil.copy('avatar.png', f'static/user/{request.form.get("name").strip()}/avatar/avatar.png')
                 shutil.copy('profile.json', f'static/user/{request.form.get("name").strip()}/profile.json')
+                shutil.copy('invites.json', f'static/user/{request.form.get("name").strip()}/invites.json')
                 return render_template('main.html')
             else:
                 return render_template('register.html', goodReg='ЕТИ', email=request.form.get('email'),
@@ -302,10 +303,18 @@ def makeanentry(name, id, number, portal):
         files = []
         for key in request.files.keys():
             f = request.files[key]
-            f.save(
-                f'static/user/{name}/entrys/files/{len(os.listdir(f"static/user/{name}/entrys/files")) + 1}file{f.filename[-4:]}')
-            files.append(
-                str(len(os.listdir(f"static/user/{name}/entrys/files"))) + f'file{request.files[key].filename[-4:]}')
+            if f.filename[-5:] == '.jfif' or f.filename[-5:] == '.jpeg':
+                f.save(
+                    f'static/user/{name}/entrys/files/{len(os.listdir(f"static/user/{name}/entrys/files")) + 1}file{f.filename[-5:]}')
+                files.append(
+                    str(len(
+                        os.listdir(f"static/user/{name}/entrys/files"))) + f'file{request.files[key].filename[-5:]}')
+            else:
+                f.save(
+                    f'static/user/{name}/entrys/files/{len(os.listdir(f"static/user/{name}/entrys/files")) + 1}file{f.filename[-4:]}')
+                files.append(
+                    str(len(
+                        os.listdir(f"static/user/{name}/entrys/files"))) + f'file{request.files[key].filename[-4:]}')
         data = {'topic': f'{request.form.get("topic")}',
                 'text': f'{request.form.get("text")}',
                 'url': f'{request.form.get("url")}'}
@@ -338,6 +347,52 @@ def write_to_file(name):
             text = str(text).replace('!/!', ' ')
         with open('text.txt', 'a') as file:
             file.write('!/!' + f'{name}: {text}')
+
+
+@app.route('/deleteFromInvites/<name>/<name2>', methods=['POST'])
+def deleteFromInvites(name, name2):
+    print('123')
+    with open(f'static/user/{name}/invites.json', 'r', encoding='utf8') as file:
+        fileData = json.load(file)
+        data = [str(i) for i in fileData['invites'] if str(i) != name2]
+        fileData['invites'] = data
+    with open(f'static/user/{name}/invites.json', 'w', encoding='utf8') as file:
+        json.dump(fileData, file)
+    with open(f'static/user/{name2}/invites.json', 'r', encoding='utf8') as file:
+        fileData = json.load(file)
+        data = [str(i) for i in fileData['invites'] if str(i) != name]
+        fileData['invites'] = data
+    with open(f'static/user/{name2}/invites.json', 'w', encoding='utf8') as file:
+        json.dump(fileData, file)
+
+
+@app.route('/addFriendprofile/<name>/<name2>', methods=['POST'])
+def addFriendProfile(name, name2):
+    print('dnwidhw')
+    with open(f'static/user/{name}/profile.json', 'r', encoding='utf8') as file:
+        fileData = json.load(file)
+        if not name2 in fileData['Friends']:
+            fileData['Friends'].append(name2)
+    with open(f'static/user/{name}/profile.json', 'w', encoding='utf8') as file:
+        json.dump(fileData, file)
+    with open(f'static/user/{name2}/profile.json', 'r', encoding='utf8') as file:
+        fileData = json.load(file)
+        if not name in fileData['Friends']:
+            fileData['Friends'].append(name)
+    with open(f'static/user/{name2}/profile.json', 'w', encoding='utf8') as file:
+        json.dump(fileData, file)
+    with open(f'static/user/{name}/invites.json', 'r', encoding='utf8') as file:
+        fileData = json.load(file)
+        data = [str(i) for i in fileData['invites'] if str(i) != name2]
+        fileData['invites'] = data
+    with open(f'static/user/{name}/invites.json', 'w', encoding='utf8') as file:
+        json.dump(fileData, file)
+    with open(f'static/user/{name2}/invites.json', 'r', encoding='utf8') as file:
+        fileData = json.load(file)
+        data = [str(i) for i in fileData['invites'] if str(i) != name]
+        fileData['invites'] = data
+    with open(f'static/user/{name2}/invites.json', 'w', encoding='utf8') as file:
+        json.dump(fileData, file)
 
 
 @app.route('/addFriend/<name>/<myname>', methods=['POST'])
@@ -395,10 +450,18 @@ def otherprofile(name, name2, id, number, portal):
                 print(invites['invites'])
                 if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
                     return render_template('otherprofile.html', name=name2, path_photos=photos,
-                                           subs=fileDataprofile['Subs'],
+                                           Friends=fileDataprofile['Friends'],
                                            id=id,
                                            number=number, portal=portal, path=path, path_videos=videos, endata=endata,
                                            members=os.listdir('static/user'), myname=name, invites=invites['invites'])
+
+
+@app.route('/notifications/<name>/<id>/<number>/<portal>')
+def notifications(name, id, number, portal):
+    with open(f'static/user/{name}/invites.json') as file:
+        fileData = json.load(file)
+    return render_template('notifications.html', name=name, id=id, number=number, portal=portal,
+                           invites=fileData['invites'])
 
 
 @app.route('/profile/<name>/<id>/<number>/<portal>', methods=['GET', 'POST'])
@@ -430,7 +493,8 @@ def profile(name, id, number, portal):
                             endata.append(fileDataen)
                 print(endata)
                 if fileData['id'] == id and fileData['number'] == number and fileData['portal'] == portal:
-                    return render_template('profile.html', name=name, path_photos=photos, subs=fileDataprofile['Subs'],
+                    return render_template('profile.html', name=name, path_photos=photos,
+                                           Friends=fileDataprofile['Friends'],
                                            id=id,
                                            number=number, portal=portal, path=path, path_videos=videos, endata=endata,
                                            members=os.listdir('static/user'))

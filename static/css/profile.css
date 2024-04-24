@@ -22,20 +22,27 @@ form.forma {
 .otstup{
     text-align: center;
     font-size: 20px;
-    color: white;
+    color: #89f76d69;
     user-select: none;
+    visibility: hidden;
 }
 
 .profile {
     position: absolute;
-    width: 100%
+    width: 100%;
+    background-color: #77f55869;
+    padding: 10px;
+    border-radius: 20px;
+    z-index: 1
 }
 
 .profile2 {
     display: flex;
     width: 700px;
     margin: 0 auto;
-    background-color: white
+    background-color: #88e57073;
+    padding: 10px;
+    border-radius: 20px;
 }
 
 .name {
@@ -47,4 +54,10 @@ form.forma {
 .profileActions {
     display: flex;
     flex-direction: column;
+}
+
+body {
+
+  background-color: #89f76d69;
+
 }

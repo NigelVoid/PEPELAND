@@ -38,7 +38,7 @@
                     <div style="overflow-y: auto; height: 300px">
                         {% for member in members %}
                         {% if member != name %}
-                        <a href="/otherprofile/{{member}}/{{name}}/{{id}}/{{number}}/{{portal}}"
+                        <a href="/otherprofile/{{member}}/{{name}}/{{id}}/{{number}}/{{portal}}"a
                            style="width: 95%; margin-top: 2%" type="button"
                            class="btn btn-outline-success">{{member}}</a>
                         {% endif %}
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <a style="width: 90.9%; margin-top: 3%" type="button" class="btn btn-success">События</a>
+        <a href="/PEPELAND/API" style="width: 90.9%; margin-top: 3%" type="button" class="btn btn-success">PEPELAND:))</a>
         <a style="width: 90.9%; margin-top: 3%" type="button" class="btn btn-success">События</a>
     </form>
 </div>
@@ -63,62 +63,48 @@
         <div style="margin-left: 10%">
             <div class="profileActions">
                 <p class="d-inline-flex gap-1">
-                <div class="btn-group" role="group" aria-label="Basic example" style="width: 238px">
-                    <button class="btn btn-success" type="button" data-bs-toggle="collapse"
+                <div class="btn-group" role="group" aria-label="Basic example" style="width: 218px">
+                    <button style="width: 210px" class="btn btn-success" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseExample3"
                             aria-expanded="false" aria-controls="collapseExample">Действие в профиле
                     </button>
                 </div>
                 <div class="collapse" id="collapseExample3">
-                    <div class="card card-body" style="width: 238px; background-color: #d7f0d169;">
-                        <div style="display: full; width: 205px;">
+                    <div class="card card-body" style="width: 218px; background-color: #d7f0d169;">
+                        <div style="display: full; width: 185px;">
                             <a href="/addAvatar/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                               style="width: 100px; margin-top: 10px" type="button"
+                               style="width: 100%; margin-top: 2px" type="button"
                                class="btn btn-outline-success">Аватарка</a>
                             <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                               style="width: 100px; margin-top: 10px"
+                               style="width: 100%; margin-top: 2px"
                                type="button" class="btn btn-outline-success">+ Фото</a>
                             <a href="/addvideo/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                               style="width: 100px; margin-top: 10px"
+                               style="width: 100%; margin-top: 2px"
                                type="button" class="btn btn-outline-success">+ Видео</a>
                             <a href="/makeanentry/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                               style="width: 100px; margin-top: 10px"
+                               style="width: 100%; margin-top: 2px"
                                type="button" class="btn btn-outline-success">+ Запись</a>
                         </div>
                     </div>
                 </div>
                 <p class="d-inline-flex gap-1">
-                <div class="btn-group" role="group" aria-label="Basic example" style="width: 238px; margin-top: 20px">
-                    <button class="btn btn-success" type="button" data-bs-toggle="collapse"
+                <div class="btn-group" role="group" aria-label="Basic example" style="width: 218px; margin-top: 20px">
+                    <button style="width: 210px" class="btn btn-success" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseExample6"
                             aria-expanded="false" aria-controls="collapseExample">Чат с друзьями
                     </button>
                 </div>
                 <div class="collapse" id="collapseExample6">
-                    <div class="card card-body" style="width: 238px; background-color: #d7f0d169;">
+                    <div class="card card-body" style="width: 218px; background-color: #d7f0d169;">
                         <div style="display: flex; flex-direction: column; width: 100%">
                             <a href="/notifications/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
                                style="margin-top: 10px" type="button"
                                class="btn btn-success">Приглашения</a>
                             <div style="display: flex; flex-direction: column; overflow-y: auto; height: 200px">
-                                <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                                   style="margin-top: 10px"
-                                   type="button" class="btn btn-outline-success">Друзья</a>
-                                <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                                   style="margin-top: 10px"
-                                   type="button" class="btn btn-outline-success">Друзья</a>
-                                <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                                   style="margin-top: 10px"
-                                   type="button" class="btn btn-outline-success">Друзья</a>
-                                <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                                   style="margin-top: 10px"
-                                   type="button" class="btn btn-outline-success">Друзья</a>
-                                <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                                   style="margin-top: 10px"
-                                   type="button" class="btn btn-outline-success">Друзья</a>
-                                <a href="/addphoto/{{ name }}/{{ id }}/{{ number }}/{{ portal }}"
-                                   style="margin-top: 10px"
-                                   type="button" class="btn btn-outline-success">Друзья</a>
+                                {% for friend in Friends %}
+                                <a href="/chatWithFriend/{{friend}}/{{name}}" style="margin-top: 10px"
+                                        type="button" class="btn btn-outline-success">{{friend}}</a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

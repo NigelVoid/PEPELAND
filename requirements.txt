@@ -1,3 +1,3 @@
 urllib3==1.26.6
-requests
-flask
+requests~=2.31.0
+flask~=3.0.2

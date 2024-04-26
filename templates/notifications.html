@@ -15,7 +15,7 @@
     <h1 style="font-size: 30px; text-align: center">{{profile}} Отправил вам запрос в дружбу!</h1>
     <div style="width: 50%; margin: 0 auto;">
         <a onclick="addFriend('{{profile}}')" style="width: 40%" class="btn btn-success" type="button">Принять</a>
-        <a style="margin-left: 15%; width: 40%" class="btn btn-danger" type="button">Отклонить</a>
+        <a onclick="cancelFriend('{{profile}}')" style="margin-left: 15%; width: 40%" class="btn btn-danger" type="button">Отклонить</a>
     </div>
 </div>
 {% endfor %}
@@ -23,6 +23,19 @@
 <script>
   function addFriend(name2) {
   fetch('/addFriendprofile/{{name}}/' + name2, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text: 'dwioajd' }),
+  });
+  const profile = document.getElementById(name2);
+  profile.remove();
+}
+</script>
+<script>
+  function cancelFriend(name2) {
+  fetch('/deleteFromInvites/{{name}}/' + name2, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
